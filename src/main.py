@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 IMG_FOLDER = '/app/images'
 
+
 @app.route("/odlc", methods=["POST"])
 def process_image():
     """
@@ -25,8 +26,8 @@ def process_image():
         offsetX, offsetY = detector.detect(img_path)
         os.remove(img_path)
 
-    except Exception as exc:
+    except Exception:
         traceback.print_exc()
         return make_response("Badly formed image update", 400)
 
-    return jsonify({'offsetX': offsetX, 'offsetY': offsetY})
+    return jsonify([offsetX, offsetY])
