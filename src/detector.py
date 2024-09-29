@@ -1,15 +1,11 @@
 import cv2
-import json
-import redis
 import numpy as np
-
-r = redis.Redis(host='redis', port=6379, db=0)
 
 RED_LOWER = (165, 10, 0)
 RED_UPPER = (180, 255, 255)
 DETECTION_SIZE_THRESHOLD = 0.05
 
-def detect(img_path, telemetry):
+def detect(img_path):
     # read in image
     img = cv2.imread(img_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -39,7 +35,7 @@ def detect(img_path, telemetry):
     target_mask = cv2.drawContours(np.zeros(img.shape[0:2], dtype=np.uint8),
                                    [largest], -1, 255, -1)
 
-    # Calculate mask center using contour moments
+    # calculate mask center using contour moments
     M = cv2.moments(np.uint8(target_mask))
     if M["m00"] == 0:
         return
@@ -47,13 +43,8 @@ def detect(img_path, telemetry):
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
 
-    # Calculate offsets
+    # calculate offsets
     offsetX = cX - height // 2
     offsetY = cY - width // 2
-
-    # Calculate new GPS coordinate
-    lat = telemetry['latitude']
-    lon = telemetry['longitude']
-    alt = telemetry['altitude']
-
     
+    return (offsetX, offsetY)
