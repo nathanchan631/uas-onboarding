@@ -43,16 +43,10 @@ async def run():
     await drone.gimbal.set_pitch_and_yaw(-90,0)
     await asyncio.sleep(5)
 
-    frame = camera.frame()
-    cv2.imwrite('../images/before.jpg', frame)
-
-
     do_continue = True
     while(do_continue):
         do_continue = await take_photo_and_move(drone, camera, -1 * altitude, position)
 
-    frame = camera.frame()
-    cv2.imwrite('../images/after.jpg', frame)
     await drone.offboard.stop()
     await drone.action.land()
 
