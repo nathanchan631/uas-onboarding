@@ -1,7 +1,7 @@
 import asyncio
 import os
 from mavsdk import System
-from mavsdk.offboard import (OffboardError, VelocityBodyYawspeed)
+from mavsdk.offboard import (OffboardError, PositionNedYaw, VelocityNedYaw)
 from mavsdk.gimbal import (GimbalMode, ControlMode)
 from camera import Video
 import cv2
@@ -11,6 +11,7 @@ async def run():
     drone = System()
     camera = Video()
     offset = {}
+    position = {"x": 0.0, "y": 0.0}
     await drone.connect(system_address="udp://:14540")
     print("Waiting for drone to connect...")
     async for state in drone.core.connection_state():
@@ -20,16 +21,22 @@ async def run():
 
 
 
-    takeoff_alt = 1.5
-    print(f"Setting takeoff altitude to {takeoff_alt} m")
-    await drone.action.set_takeoff_altitude(takeoff_alt)
+    altitude = 1.5
+    print(f"Setting takeoff altitude to {altitude} m")
 
     print("Arming drone...")
     await drone.action.arm()
 
     print("Taking off...")
-    await drone.action.takeoff()
-    await check_altitude(drone, takeoff_alt)
+    await drone.offboard.set_position_ned(
+        PositionNedYaw(0.0, 0.0, 0.0, 0.0))
+    await drone.offboard.start()
+    await drone.offboard.set_position_velocity_ned(
+        PositionNedYaw(0.0, 0.0, -1 * altitude, 0.0),
+        VelocityNedYaw(0.0, 0.0, -1.0, 0.0)
+    )
+    await asyncio.sleep(5)
+
     print("Pointing camera gimbal straight down")
     await drone.gimbal.take_control(ControlMode.PRIMARY)
     await drone.gimbal.set_mode(GimbalMode.YAW_LOCK)
@@ -38,26 +45,18 @@ async def run():
 
     frame = camera.frame()
     cv2.imwrite('../images/before.jpg', frame)
-    try:
-        do_continue = await take_photo_and_move(drone, camera)
-        while(do_continue):
-            do_continue = await take_photo_and_move(drone, camera)
 
-    except Exception:
-        print("for loop died")
+
+    do_continue = True
+    while(do_continue):
+        do_continue = await take_photo_and_move(drone, camera, -1 * altitude, position)
 
     frame = camera.frame()
     cv2.imwrite('../images/after.jpg', frame)
+    await drone.offboard.stop()
     await drone.action.land()
 
-
-async def check_altitude(drone, alt):
-    async for pos in drone.telemetry.position():
-        if (pos.relative_altitude_m >= (alt - 0.3)):
-            break
-    return
-
-async def take_photo_and_move(drone, camera):
+async def take_photo_and_move(drone, camera, altitude, position):
     try:
         print("Taking photo...")
         offset = {}
@@ -69,16 +68,15 @@ async def take_photo_and_move(drone, camera):
         offset['x'] = res.json()[0]
         offset['y'] = res.json()[1]
         print(f"{offset['x']} {offset['y']}")
-        await drone.offboard.set_velocity_body(
-        VelocityBodyYawspeed(-1 * (offset['x'] / 1000),
-                             -1 * (offset['y'] / 1000),
-                             0,
-                             0))
-        await drone.offboard.start()
-        await asyncio.sleep(1.5)
-        await drone.offboard.stop()
-        await asyncio.sleep(2)
+        position["x"] = position["x"] + (offset["x"] / 1000)
+        position["y"] = position["y"] + (offset["y"] / 1000)
+        await drone.offboard.set_position_velocity_ned(
+            PositionNedYaw(position["y"], position["x"], altitude, 0.0),
+            VelocityNedYaw(position["y"] / 500, offset['x'] / 500, 0.0, 0.0)
+        )
+        await asyncio.sleep(5)
         return (abs(offset['x']) >= 10 or abs(offset['y']) >= 10)
+
 
     except Exception as error:
         print(f"{error}")
