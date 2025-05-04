@@ -47,6 +47,9 @@ def detect_color_from_array(image_array):
     hsv_reshaped = hsv_image.reshape(-1, 3)
 
     remove_black = [pixel for pixel in hsv_reshaped if not (pixel[0] == 0 and pixel[1] == 0 and pixel[2] == 0)]
+    if not remove_black:
+        print("ERROR: No non-black pixels found.")
+        return 'black'
 
     mean_hsv = np.mean(remove_black, axis=0)
     color_name = closest_hsv(mean_hsv)

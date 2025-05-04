@@ -12,6 +12,7 @@ import torchvision.transforms as T
 import torchvision.transforms.functional as TF
 import random
 from sklearn.cluster import KMeans
+import time
 
 def segment_text_by_pixel_count(image_bgr, channel='h'):
     """
@@ -214,16 +215,19 @@ def get_shape_text_masks(img):
         masked_crops.append(cv2.cvtColor(masked_crop, cv2.COLOR_BGR2RGB))
     shape_crops = []
     text_crops = []
-    for crop in masked_crops:
+    crop_areas = [crop.shape[0] * crop.shape[1] for crop in masked_crops]
+    sorted_indices = sorted(range(len(masked_crops)), key=lambda i: crop_areas[i], reverse=True)
+    masked_crops_sorted = [masked_crops[i] for i in sorted_indices]
+    for crop in masked_crops_sorted:
         text = segment_text_by_pixel_count(crop, channel='h')
         text_crops.append(text)
         #non_black_mask = ~(np.all(crop == [0, 0, 0], axis=-1))
         #crop[non_black_mask] = [255, 255, 255]
         shape_crops.append(crop)
-    return centroids, shape_crops, text_crops
+    return centroids[0], shape_crops[0], text_crops[0]
 
 # Test Case
 #image = cv2.imread('./IMG_6823.png')
 #centroids, shape_crops, text_crops = get_shape_text_masks(image)
 #print(centroids)
-#print(text_crops[2])
+#plt.imshow(shape_crops)
