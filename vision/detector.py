@@ -1,51 +1,32 @@
 import cv2
 import numpy as np
 
-RED_LOWER_1 = (165, 10, 0)
-RED_UPPER_1 = (180, 255, 255)
-RED_LOWER_2 = (0, 10, 0)
-RED_UPPER_2 = (10, 255, 255)
-
-DETECTION_SIZE_THRESHOLD = 0.005
-
+from vision.color_detection import detect_color_from_array
+from vision.target_detection import get_shape_text_masks
+from vision.text_detection import predict_text
 
 def detect(img_path):
-
-    # read in image
     img = cv2.imread(img_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-    # blur the image
-    blurred = cv2.medianBlur(img, ksize=11)
+    # get masks
+    shape_mask, text_mask = get_shape_text_masks(img)
 
-    # extract red and erode
-    red_mask_1 = cv2.inRange(blurred, RED_LOWER_1, RED_UPPER_1)
-    red_mask_2 = cv2.inRange(blurred, RED_LOWER_2, RED_UPPER_2)
+    # text detection
+    text_pred = predict_text(text_mask, "model/text.pth", 3)
+    for i, (label, prob) in enumerate(text_pred, 1):
+        print(f"{i}. {label}: {prob:.4f}") 
 
-    red_mask = red_mask_1 ^ red_mask_2
-    red_mask = cv2.erode(red_mask, np.ones((3, 3)))
+    # color detection
+    shape_pixels = cv2.bitwise_and(img, img, mask=shape_mask)
+    text_pixels = cv2.bitwise_and(img, img, mask=text_mask)
+    shape_color = detect_color_from_array(shape_pixels)
+    text_color = detect_color_from_array(text_pixels)
 
-    # get largest red contour
-    contours, _ = cv2.findContours(red_mask, cv2.RETR_EXTERNAL,
-                                   cv2.CHAIN_APPROX_SIMPLE)
-    if not contours:
-        print("No red contours found")
-        return None
-
-    largest = max(contours, key=cv2.contourArea)
-
-    # return if the largest contour is too small
-    height, width = img.shape[:2]
-    if cv2.contourArea(largest) < DETECTION_SIZE_THRESHOLD * height * width:
-        print("Contour Area too small")
-        return None
-
-    # get center
-    target_mask = cv2.drawContours(np.zeros(img.shape[0:2], dtype=np.uint8),
-                                   [largest], -1, 255, -1)
+    print(shape_color, text_color)
 
     # calculate mask center using contour moments
-    M = cv2.moments(np.uint8(target_mask))
+    M = cv2.moments(np.uint8(shape_mask))
     if M["m00"] == 0:
         return None
 
@@ -53,6 +34,7 @@ def detect(img_path):
     cY = int(M["m01"] / M["m00"])
 
     # calculate offsets. note (0, 0) is the top left of the image
+    height, width = img.shape[:2]
     offsetX = cX - width/2
     offsetY = -(cY - height/2)
 
