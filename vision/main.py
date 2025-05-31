@@ -7,7 +7,7 @@ import detector
 
 app = Flask(__name__)
 
-IMG_FOLDER = '/app/images'
+IMG_FOLDER = '../images'
 
 
 @app.route("/odlc", methods=["POST"])
@@ -24,7 +24,7 @@ def process_image():
         # Process image
         img_path = f"{IMG_FOLDER}/{req['img_name']}"
         offsetX, offsetY = detector.detect(img_path)
-        os.remove(img_path)
+        # os.remove(img_path)
 
     except Exception:
         traceback.print_exc()

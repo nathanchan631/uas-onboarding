@@ -121,7 +121,7 @@ def convert_colors(img):
     return output
 
 def get_shape_text_masks(img):
-    filtered_image = cv2.medianBlur(image, ksize=11)
+    filtered_image = cv2.medianBlur(img, ksize=11)
     hsv_image = cv2.cvtColor(filtered_image, cv2.COLOR_BGR2HSV)
     v_channel = hsv_image[:, :, 1]
 
@@ -195,7 +195,7 @@ def get_shape_text_masks(img):
             centroids.append((cX, cY))
     kernel = np.ones((9, 9), np.uint8)  # You can tweak the size (3x3, 5x5, etc.)
     eroded_mask = cv2.erode(output_mask, kernel, iterations=1)
-    masked_image = cv2.bitwise_and(image, image, mask=eroded_mask)
+    masked_image = cv2.bitwise_and(img, img, mask=eroded_mask)
 
     # Step 2: Crop 64x64 patches around each centroid
     crop_size = 128

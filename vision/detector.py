@@ -10,7 +10,16 @@ def detect(img_path):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     # get masks
-    shape_mask, text_mask = get_shape_text_masks(img)
+    shape_masks, text_masks = get_shape_text_masks(img)
+
+    for i in range(len(shape_masks)):
+        cv2.imwrite(f"{img_path}.shape_mask_{i}.png", shape_masks[i])
+
+    for i in range(len(text_masks)):
+        cv2.imwrite(f"{img_path}.text_mask_{i}.png", text_masks[i])
+
+    shape_mask = shape_masks[0]
+    text_mask = text_masks[0]
 
     # text detection
     text_pred = predict_text(text_mask, "model/text.pth", 3)
@@ -18,12 +27,19 @@ def detect(img_path):
         print(f"{i}. {label}: {prob:.4f}") 
 
     # color detection
+    shape_mask = cv2.cvtColor(shape_mask, cv2.COLOR_BGR2GRAY)
+    text_mask = cv2.cvtColor(text_mask, cv2.COLOR_BGR2GRAY)
+
+    shape_mask = shape_mask.astype(np.uint8)
+    text_mask = text_mask.astype(np.uint8)
+    img = img.astype(np.uint8)
+
     shape_pixels = cv2.bitwise_and(img, img, mask=shape_mask)
     text_pixels = cv2.bitwise_and(img, img, mask=text_mask)
     shape_color = detect_color_from_array(shape_pixels)
     text_color = detect_color_from_array(text_pixels)
 
-    print(shape_color, text_color)
+    print(f"{shape_color=}, {text_color=}")
 
     # calculate mask center using contour moments
     M = cv2.moments(np.uint8(shape_mask))

@@ -21,7 +21,7 @@ transform = transforms.Compose([
 
 def predict_text(image_cv, model_path='resnet18_finetuned.pth', topk=3):
     # Load class mapping from CSV
-    csv_path = 'model/labels.csv'
+    csv_path = 'model/text_labels.csv'
     df = pd.read_csv(csv_path)
     classes = sorted(df['label'].unique())
     class_to_idx = {cls: idx for idx, cls in enumerate(classes)}
@@ -29,7 +29,7 @@ def predict_text(image_cv, model_path='resnet18_finetuned.pth', topk=3):
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = get_finetuned_resnet(num_classes=len(class_to_idx))
-    model.load_state_dict(torch.load(model_path, map_location=device))
+    model.load_state_dict(torch.load(model_path, map_location=device, weights_only=False))
     model.eval()
     model.to(device)
 

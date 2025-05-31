@@ -32,7 +32,7 @@ def closest_hsv(requested_hsv):
 
         distance = np.sqrt((3 * h_diff) ** 2 + (2 * s_diff) ** 2 + (1 * v_diff) ** 2)
         distances[name] = distance
-        print(f"{name}: distance = {distance:.2f}")
+        # print(f"{name}: distance = {distance:.2f}")
 
     return min(distances, key=distances.get)
 
@@ -46,7 +46,7 @@ def detect_color_from_array(image_array):
     rgb_counts = Counter(map(tuple, rgb_reshaped))
     most_common_rgb = rgb_counts.most_common(1)[0][0]
     most_common_rgb = tuple(int(x) for x in most_common_rgb)
-    print("Most common RGB:", most_common_rgb)
+    # print("Most common RGB:", most_common_rgb)
 
     # Convert BGR to HSV and find most common HSV
     hsv_image = cv2.cvtColor(image_array, cv2.COLOR_BGR2HSV)
@@ -54,10 +54,10 @@ def detect_color_from_array(image_array):
     hsv_counts = Counter(map(tuple, hsv_reshaped))
     most_common_hsv = hsv_counts.most_common(1)[0][0]
     most_common_hsv = tuple(int(x) for x in most_common_hsv)
-    print("Most common HSV:", most_common_hsv)
+    # print("Most common HSV:", most_common_hsv)
 
     color_name = closest_hsv(most_common_hsv)
-    print("Closest color name:", color_name)
+    # print("Closest color name:", color_name)
     return color_name
 
 '''
