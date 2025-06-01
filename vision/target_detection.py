@@ -16,14 +16,14 @@ from sklearn.cluster import KMeans
 def segment_text_by_pixel_count(image_bgr, channel='h'):
     """
     Segments text by applying KMeans clustering on the specified HSV channel.
-    The clustering is done based on the center 50% of non-black pixels.
+    The text region is kept in its original color, and the background is set to black.
 
     Args:
         image_bgr (np.ndarray): Input image in BGR format.
         channel (str): HSV channel to use ('h', 's', or 'v').
 
     Returns:
-        np.ndarray: Output RGB image (white background with largest text region in black).
+        np.ndarray: RGB image with black background and original-color text.
     """
     # Convert to HSV and RGB
     image_hsv = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2HSV)
@@ -47,8 +47,8 @@ def segment_text_by_pixel_count(image_bgr, channel='h'):
     non_black_mask = ~(np.all(patch_rgb == [0, 0, 0], axis=-1))
     center_vals = patch[non_black_mask].reshape(-1, 1)
 
-    # Prepare output canvas
-    output = np.ones_like(image_rgb, dtype=np.uint8) * 255
+    # Prepare black output canvas
+    output = np.zeros_like(image_rgb, dtype=np.uint8)
 
     if len(center_vals) < 2:
         return output  # Not enough data for clustering
@@ -76,11 +76,15 @@ def segment_text_by_pixel_count(image_bgr, channel='h'):
     text_mask = np.zeros_like(label_map, dtype=np.uint8)
     text_mask[label_map == text_label] = 255
 
-    # Draw largest contour on white background
+    # Draw the largest contour as a mask
     contours, _ = cv2.findContours(text_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if contours:
         largest = max(contours, key=cv2.contourArea)
-        cv2.drawContours(output, [largest], -1, (0, 0, 0), thickness=cv2.FILLED)
+        contour_mask = np.zeros_like(text_mask)
+        cv2.drawContours(contour_mask, [largest], -1, 255, thickness=cv2.FILLED)
+
+        # Apply mask to original RGB image
+        output[contour_mask == 255] = image_rgb[contour_mask == 255]
 
     return output
 
@@ -165,57 +169,57 @@ def get_shape_text_masks(img):
             bounding_boxes.append((left, right, top, bottom))
 
 
-        masked_crops = []
-        bounding_box_coords = []
+    masked_crops = []
+    bounding_box_coords = []
 
-        # Percent of bounding box size to erode (e.g., 10%)
-        erosion_percent = 0.15
+    # Percent of bounding box size to erode (e.g., 10%)
+    erosion_percent = 0.15
 
-        for idx, box in enumerate(bounding_boxes):
-            left, right, top, bottom = box
+    for idx, box in enumerate(bounding_boxes):
+        left, right, top, bottom = box
 
-            # Clamp bounding box to image boundaries
-            x1 = max(left[0], 0)
-            x2 = min(right[0], img.shape[1])
-            y1 = max(top[1], 0)
-            y2 = min(bottom[1], img.shape[0])
+        # Clamp bounding box to image boundaries
+        x1 = max(left[0], 0)
+        x2 = min(right[0], img.shape[1])
+        y1 = max(top[1], 0)
+        y2 = min(bottom[1], img.shape[0])
 
-            # Extract region from original mask and image
-            bbox_mask = output_mask[y1:y2, x1:x2]
-            bbox_image = img[y1:y2, x1:x2]
+        # Extract region from original mask and image
+        bbox_mask = output_mask[y1:y2, x1:x2]
+        bbox_image = img[y1:y2, x1:x2]
 
-            # Compute kernel size as a percentage of bounding box size
-            bw = max(x2 - x1, 1)
-            bh = max(y2 - y1, 1)
-            kx = max(1, int(bw * erosion_percent))
-            ky = max(1, int(bh * erosion_percent))
+        # Compute kernel size as a percentage of bounding box size
+        bw = max(x2 - x1, 1)
+        bh = max(y2 - y1, 1)
+        kx = max(1, int(bw * erosion_percent))
+        ky = max(1, int(bh * erosion_percent))
 
-            # Ensure kernel size is odd and >= 3
-            kx = kx + 1 if kx % 2 == 0 else kx
-            ky = ky + 1 if ky % 2 == 0 else ky
-            kx = max(kx, 3)
-            ky = max(ky, 3)
+        # Ensure kernel size is odd and >= 3
+        kx = kx + 1 if kx % 2 == 0 else kx
+        ky = ky + 1 if ky % 2 == 0 else ky
+        kx = max(kx, 3)
+        ky = max(ky, 3)
 
-            # Apply erosion to the mask region
-            kernel = np.ones((ky, kx), np.uint8)
-            eroded = cv2.erode(bbox_mask, kernel, iterations=1)
+        # Apply erosion to the mask region
+        kernel = np.ones((ky, kx), np.uint8)
+        eroded = cv2.erode(bbox_mask, kernel, iterations=1)
 
-            # Mask the image patch
-            masked_crop = cv2.bitwise_and(bbox_image, bbox_image, mask=eroded)
+        # Mask the image patch
+        masked_crop = cv2.bitwise_and(bbox_image, bbox_image, mask=eroded)
 
-            # Save bounding box and masked crop
-            bounding_box_coords.append(((x1, y1), (x2, y2)))
+        # Save bounding box and masked crop
+        bounding_box_coords.append(((x1, y1), (x2, y2)))
 
-            # For display
-            masked_crops.append(cv2.cvtColor(masked_crop, cv2.COLOR_BGR2RGB))
-        shape_crops = []
-        text_crops = []
-        for crop in masked_crops:
-            text = segment_text_by_pixel_count(crop, channel='h')
-            text_crops.append(text)
-            non_black_mask = ~(np.all(crop == [0, 0, 0], axis=-1))
-            crop[non_black_mask] = [255, 255, 255]
-            shape_crops.append(crop)
+        # For display
+        masked_crops.append(cv2.cvtColor(masked_crop, cv2.COLOR_BGR2RGB))
+    shape_crops = []
+    text_crops = []
+    for crop in masked_crops:
+        text = segment_text_by_pixel_count(crop, channel='h')
+        text_crops.append(text)
+        #non_black_mask = ~(np.all(crop == [0, 0, 0], axis=-1))
+        #crop[non_black_mask] = [255, 255, 255]
+        shape_crops.append(crop)
     return centroids, shape_crops, text_crops
 
 # Test Case

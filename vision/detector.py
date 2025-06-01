@@ -22,23 +22,17 @@ def detect(img_path):
     text_mask = text_masks[0]
 
     # text detection
-    text_pred = predict_text(text_mask, "model/text.pth", 3)
+    text_nonblack_mask = ~(np.all(text_mask == [0, 0, 0], axis=-1))
+    text_white = text_mask.copy()
+    text_white[text_nonblack_mask] = [255, 255, 255]
+
+    text_pred = predict_text(text_white, "model/text.pth", 3)
     for i, (label, prob) in enumerate(text_pred, 1):
         print(f"{i}. {label}: {prob:.4f}") 
 
     # color detection
-    shape_mask = cv2.cvtColor(shape_mask, cv2.COLOR_BGR2GRAY)
-    text_mask = cv2.cvtColor(text_mask, cv2.COLOR_BGR2GRAY)
-    print(shape_mask.shape, img.shape)
-
-    shape_mask = shape_mask.astype(np.uint8)
-    text_mask = text_mask.astype(np.uint8)
-    img = img.astype(np.uint8)
-
-    shape_pixels = cv2.bitwise_and(img, img, mask=shape_mask)
-    text_pixels = cv2.bitwise_and(img, img, mask=text_mask)
-    shape_color = detect_color_from_array(shape_pixels)
-    text_color = detect_color_from_array(text_pixels)
+    shape_color = detect_color_from_array(shape_mask)
+    text_color = detect_color_from_array(text_mask)
 
     print(f"{shape_color=}, {text_color=}")
 
