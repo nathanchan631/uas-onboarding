@@ -1,0 +1,7 @@
+# ninja log v5
+1	966	1746211690753989316	CMakeFiles/take_image.dir/follow_circle.cpp.o	36a55f568ce0e05c
+5	834	1748482613133529688	CMakeFiles/take_image.dir/camera.cpp.o	a88f321e19ddcb93
+2	430	1747084500529759277	CMakeFiles/take_image.dir/pid.cpp.o	db727b921b2c1569
+5	1005	1748482613303529000	CMakeFiles/take_image.dir/mission.cpp.o	e91381cffdb5347
+1005	1075	1748482613373528717	../take_image	a08cad41b84f93e9
+1	722	1747086787044736878	CMakeFiles/take_image.dir/detector.cpp.o	8dcd37adfe3873df
