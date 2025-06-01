@@ -13,114 +13,81 @@ import torchvision.transforms.functional as TF
 import random
 from sklearn.cluster import KMeans
 
-def segment_full_image_from_center_kmeans(image_bgr):
-    assert image_bgr.shape[:2] == (128, 128), "Image must be 128x128"
+def segment_text_by_pixel_count(image_bgr, channel='h'):
+    """
+    Segments text by applying KMeans clustering on the specified HSV channel.
+    The clustering is done based on the center 50% of non-black pixels.
 
-    # Extract center 32x32 patch
-    cx, cy = 64, 64
-    half = 16
-    center_patch = image_bgr[cy - half:cy + half, cx - half:cx + half]
+    Args:
+        image_bgr (np.ndarray): Input image in BGR format.
+        channel (str): HSV channel to use ('h', 's', or 'v').
 
-    # Convert entire image and center patch to HSV
+    Returns:
+        np.ndarray: Output RGB image (white background with largest text region in black).
+    """
+    # Convert to HSV and RGB
     image_hsv = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2HSV)
-    patch_hsv = cv2.cvtColor(center_patch, cv2.COLOR_BGR2HSV)
     image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
-    patch_rgb = cv2.cvtColor(center_patch, cv2.COLOR_BGR2RGB)
 
-    # Flatten center patch and ignore black pixels
-    patch_rgb_flat = patch_rgb.reshape(-1, 3)
-    non_black_mask = ~(np.all(patch_rgb_flat == [0, 0, 0], axis=1))
+    channel_map = {'h': 0, 's': 1, 'v': 2}
+    selected_channel = image_hsv[:, :, channel_map[channel]]
 
-    # Extract H, S, V channels from the center patch
-    patch_h_flat = patch_hsv[:, :, 0].flatten()
-    patch_s_flat = patch_hsv[:, :, 1].flatten()
-    patch_v_flat = patch_hsv[:, :, 2].flatten()
+    H, W = image_bgr.shape[:2]
 
-    # Filter non-black pixels
-    patch_h_filtered = patch_h_flat[non_black_mask].reshape(-1, 1)
-    patch_s_filtered = patch_s_flat[non_black_mask].reshape(-1, 1)
-    patch_v_filtered = patch_v_flat[non_black_mask].reshape(-1, 1)
+    # Define center 50% region
+    x_start = W // 4
+    x_end = x_start + W // 2
+    y_start = H // 4
+    y_end = y_start + H // 2
 
-    # Perform KMeans on each channel
-    kmeans_h = KMeans(n_clusters=2, random_state=42, n_init='auto')
-    kmeans_s = KMeans(n_clusters=2, random_state=42, n_init='auto')
-    kmeans_v = KMeans(n_clusters=2, random_state=42, n_init='auto')
+    patch = selected_channel[y_start:y_end, x_start:x_end]
+    patch_rgb = image_rgb[y_start:y_end, x_start:x_end]
 
-    if len(patch_h_filtered) < 2 or len(patch_s_filtered) < 2 or len(patch_v_filtered) < 2:
-        raise ValueError("Not enough non-black pixels in center patch for KMeans.")
+    # Remove black pixels
+    non_black_mask = ~(np.all(patch_rgb == [0, 0, 0], axis=-1))
+    center_vals = patch[non_black_mask].reshape(-1, 1)
 
-    kmeans_h.fit(patch_h_filtered)
-    kmeans_s.fit(patch_s_filtered)
-    kmeans_v.fit(patch_v_filtered)
+    # Prepare output canvas
+    output = np.ones_like(image_rgb, dtype=np.uint8) * 255
 
-    # Apply cluster thresholds to the full image for H, S, V
-    full_h = image_hsv[:, :, 0]
-    full_s = image_hsv[:, :, 1]
-    full_v = image_hsv[:, :, 2]
+    if len(center_vals) < 2:
+        return output  # Not enough data for clustering
 
-    # Apply clustering for each channel
-    label_map_h = np.zeros_like(full_h, dtype=np.int8)
-    label_map_s = np.zeros_like(full_s, dtype=np.int8)
-    label_map_v = np.zeros_like(full_v, dtype=np.int8)
+    # KMeans clustering
+    kmeans = KMeans(n_clusters=2, random_state=42, n_init='auto')
+    kmeans.fit(center_vals)
+    centers = np.sort(kmeans.cluster_centers_.flatten())
+    threshold = np.mean(centers)
 
-    # Hue (H) clustering
-    centers_h = np.sort(kmeans_h.cluster_centers_.flatten())
-    mid_threshold_h = np.mean(centers_h)
-    label_map_h[full_h >= mid_threshold_h] = 1
+    # Generate label map
+    label_map = np.zeros_like(selected_channel, dtype=np.uint8)
+    label_map[selected_channel >= threshold] = 1
 
-    # Saturation (S) clustering
-    centers_s = np.sort(kmeans_s.cluster_centers_.flatten())
-    mid_threshold_s = np.mean(centers_s)
-    label_map_s[full_s >= mid_threshold_s] = 1
-
-    # Value (V) clustering
-    centers_v = np.sort(kmeans_v.cluster_centers_.flatten())
-    mid_threshold_v = np.mean(centers_v)
-    label_map_v[full_v >= mid_threshold_v] = 1
-
-    # Mask out black pixels in original image
+    # Mask out black background
     black_mask = np.all(image_rgb == [0, 0, 0], axis=-1)
-    label_map_h[black_mask] = -1
-    label_map_s[black_mask] = -1
-    label_map_v[black_mask] = -1
+    label_map[black_mask] = 255  # ignore flag
 
-    # Visualization
-    vis_h = np.zeros((128, 128, 3), dtype=np.uint8)
-    vis_s = np.zeros((128, 128, 3), dtype=np.uint8)
-    vis_v = np.zeros((128, 128, 3), dtype=np.uint8)
+    # Choose smaller cluster as text
+    count_0 = np.sum(label_map == 0)
+    count_1 = np.sum(label_map == 1)
+    text_label = 0 if count_0 < count_1 else 1
 
-    vis_h[label_map_h == 0] = [255, 0, 0]    # Red for cluster 0 (Hue)
-    vis_h[label_map_h == 1] = [0, 0, 255]    # Blue for cluster 1 (Hue)
+    # Create binary text mask
+    text_mask = np.zeros_like(label_map, dtype=np.uint8)
+    text_mask[label_map == text_label] = 255
 
-    vis_s[label_map_s == 0] = [255, 0, 0]    # Red for cluster 0 (Saturation)
-    vis_s[label_map_s == 1] = [0, 0, 255]    # Blue for cluster 1 (Saturation)
-
-    vis_v[label_map_v == 0] = [255, 0, 0]    # Red for cluster 0 (Value)
-    vis_v[label_map_v == 1] = [0, 0, 255]    # Blue for cluster 1 (Value)
-
-    vis_h[label_map_h == -1] = [0, 0, 0]     # Black for ignored
-    vis_s[label_map_s == -1] = [0, 0, 0]     # Black for ignored
-    vis_v[label_map_v == -1] = [0, 0, 0]     # Black for ignored
-    return label_map_h, label_map_s, label_map_v
-
-def convert_colors(img):
-    # Count occurrences of -1, 0, and 1
-    unique, counts = np.unique(img, return_counts=True)
-    value_counts = dict(zip(unique, counts))
-
-    # Find the least common of the possible values
-    candidates = {-1: float('inf'), 0: float('inf'), 1: float('inf')}
-    candidates.update(value_counts)
-    least_common = min(candidates, key=candidates.get)
-
-    # Prepare output image
-    h, w = img.shape
-    output = np.ones((h, w, 3), dtype=np.uint8) * 255  # Start all white
-    output[img == least_common] = [0, 0, 0]  # Least common value -> black
+    # Draw largest contour on white background
+    contours, _ = cv2.findContours(text_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if contours:
+        largest = max(contours, key=cv2.contourArea)
+        cv2.drawContours(output, [largest], -1, (0, 0, 0), thickness=cv2.FILLED)
 
     return output
 
+
 def get_shape_text_masks(img):
+    height, width = img.shape[:2]
+    img_area = height * width
     filtered_image = cv2.medianBlur(img, ksize=11)
     hsv_image = cv2.cvtColor(filtered_image, cv2.COLOR_BGR2HSV)
     v_channel = hsv_image[:, :, 1]
@@ -146,10 +113,12 @@ def get_shape_text_masks(img):
 
     output_mask = np.zeros_like(binary_image)
     centroids = []
+    bounding_boxes = []
+    percent = 1500 / 18019728
 
     for contour in contours:
         area = cv2.contourArea(contour)
-        if area < 1000:  # Skip tiny noisy regions
+        if area < percent * img_area:  # Skip tiny noisy regions
             continue
 
         # Convex hull + solidity
@@ -180,12 +149,6 @@ def get_shape_text_masks(img):
         if fill_ratio < 0.95:
             continue
 
-        # Optional: Reject overly complex contours (optional)
-        '''epsilon = 0.01 * cv2.arcLength(contour, True)
-        approx = cv2.approxPolyDP(contour, epsilon, True)
-        if len(approx) > 15:
-            continue'''
-
         # Passed all filters – draw to final output
         cv2.drawContours(output_mask, [contour], -1, 255, thickness=cv2.FILLED)
         M = cv2.moments(contour)
@@ -193,47 +156,70 @@ def get_shape_text_masks(img):
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
             centroids.append((cX, cY))
-    kernel = np.ones((9, 9), np.uint8)  # You can tweak the size (3x3, 5x5, etc.)
-    eroded_mask = cv2.erode(output_mask, kernel, iterations=1)
-    masked_image = cv2.bitwise_and(img, img, mask=eroded_mask)
 
-    # Step 2: Crop 64x64 patches around each centroid
-    crop_size = 128
-    half_crop = crop_size // 2
-    masked_crops = []
-    shape_crops = []
-    text_crops = []
+            left = tuple(contour[contour[:, :, 0].argmin()][0])
+            right = tuple(contour[contour[:, :, 0].argmax()][0])
+            top = tuple(contour[contour[:, :, 1].argmin()][0])
+            bottom = tuple(contour[contour[:, :, 1].argmax()][0])
 
-    for idx, (cX, cY) in enumerate(centroids):
-        x1 = max(cX - half_crop, 0)
-        y1 = max(cY - half_crop, 0)
-        x2 = min(cX + half_crop, masked_image.shape[1])
-        y2 = min(cY + half_crop, masked_image.shape[0])
-        crop = masked_image[y1:y2, x1:x2]
+            bounding_boxes.append((left, right, top, bottom))
 
-        # Pad if the crop is smaller than 64x64
-        h, w = crop.shape[:2]
-        if h < crop_size or w < crop_size:
-            top = (crop_size - h) // 2
-            bottom = crop_size - h - top
-            left = (crop_size - w) // 2
-            right = crop_size - w - left
-            crop = cv2.copyMakeBorder(crop, top, bottom, left, right,
-                                      cv2.BORDER_CONSTANT, value=(0, 0, 0))
-        masked_crops.append(cv2.cvtColor(crop, cv2.COLOR_BGR2RGB))
-        segmentation_labels_h, segmentation_labels_s, segmentation_labels_v = segment_full_image_from_center_kmeans(crop)
-        vis_h = convert_colors(segmentation_labels_h)
-        vis_s = convert_colors(segmentation_labels_s)
-        vis_v = convert_colors(segmentation_labels_v)    
-        text_crops.append(cv2.cvtColor(vis_h, cv2.COLOR_BGR2RGB))    
-        non_black_mask = ~(np.all(crop == [0, 0, 0], axis=-1))
-        crop[non_black_mask] = [255, 255, 255]
-        shape_crops.append(cv2.cvtColor(crop, cv2.COLOR_BGR2RGB))
-    return shape_crops, text_crops
+
+        masked_crops = []
+        bounding_box_coords = []
+
+        # Percent of bounding box size to erode (e.g., 10%)
+        erosion_percent = 0.15
+
+        for idx, box in enumerate(bounding_boxes):
+            left, right, top, bottom = box
+
+            # Clamp bounding box to image boundaries
+            x1 = max(left[0], 0)
+            x2 = min(right[0], img.shape[1])
+            y1 = max(top[1], 0)
+            y2 = min(bottom[1], img.shape[0])
+
+            # Extract region from original mask and image
+            bbox_mask = output_mask[y1:y2, x1:x2]
+            bbox_image = img[y1:y2, x1:x2]
+
+            # Compute kernel size as a percentage of bounding box size
+            bw = max(x2 - x1, 1)
+            bh = max(y2 - y1, 1)
+            kx = max(1, int(bw * erosion_percent))
+            ky = max(1, int(bh * erosion_percent))
+
+            # Ensure kernel size is odd and >= 3
+            kx = kx + 1 if kx % 2 == 0 else kx
+            ky = ky + 1 if ky % 2 == 0 else ky
+            kx = max(kx, 3)
+            ky = max(ky, 3)
+
+            # Apply erosion to the mask region
+            kernel = np.ones((ky, kx), np.uint8)
+            eroded = cv2.erode(bbox_mask, kernel, iterations=1)
+
+            # Mask the image patch
+            masked_crop = cv2.bitwise_and(bbox_image, bbox_image, mask=eroded)
+
+            # Save bounding box and masked crop
+            bounding_box_coords.append(((x1, y1), (x2, y2)))
+
+            # For display
+            masked_crops.append(cv2.cvtColor(masked_crop, cv2.COLOR_BGR2RGB))
+        shape_crops = []
+        text_crops = []
+        for crop in masked_crops:
+            text = segment_text_by_pixel_count(crop, channel='h')
+            text_crops.append(text)
+            non_black_mask = ~(np.all(crop == [0, 0, 0], axis=-1))
+            crop[non_black_mask] = [255, 255, 255]
+            shape_crops.append(crop)
+    return centroids, shape_crops, text_crops
 
 # Test Case
-'''
-image = cv2.imread('./IMG_6823.png')
-shape_crops, text_crops = get_shape_text_masks(image)
-print(text_crops[2])
-'''
+#image = cv2.imread('./IMG_6823.png')
+#centroids, shape_crops, text_crops = get_shape_text_masks(image)
+#print(centroids)
+#print(text_crops[2])

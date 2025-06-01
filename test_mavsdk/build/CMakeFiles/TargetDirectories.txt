@@ -1,3 +1,3 @@
-/home/uasai/Documents/test_mavsdk/build/CMakeFiles/take_image.dir
-/home/uasai/Documents/test_mavsdk/build/CMakeFiles/edit_cache.dir
-/home/uasai/Documents/test_mavsdk/build/CMakeFiles/rebuild_cache.dir
+/home/uasatucla/uas-onboarding/test_mavsdk/build/CMakeFiles/take_image.dir
+/home/uasatucla/uas-onboarding/test_mavsdk/build/CMakeFiles/edit_cache.dir
+/home/uasatucla/uas-onboarding/test_mavsdk/build/CMakeFiles/rebuild_cache.dir

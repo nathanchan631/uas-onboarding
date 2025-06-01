@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/takeoff_and_land.dir/pid.cpp.o -o takeoff_and_land  /usr/lib/libmavsdk.so.3.0.0 -ldl 

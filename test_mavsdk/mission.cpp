@@ -4,14 +4,13 @@
 #include <mavsdk/plugins/telemetry/telemetry.h>
 #include <mavsdk/plugins/mission/mission.h>
 #include <mavsdk/plugins/gimbal/gimbal.h>
+#include <curl/curl.h>
+#include <json/json.h>
 
 #include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <thread>
-
-#include "camera.h"
-#include "detector.h"
 
 using namespace mavsdk;
 using namespace std::chrono_literals;
@@ -105,6 +104,93 @@ bool bring_down_gimbal(Gimbal &gimbal) {
     return true;
 }
 
+struct Point2d {
+	double x, y;
+};
+
+// Callback function to write received data into a std::string
+// This function is called by libcurl as data arrives from the server.
+size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
+    // Calculate the real size of the data received in this chunk
+    size_t realsize = size * nmemb;
+    // Cast the userp pointer back to a std::string* and append the contents
+    ((std::string*)userp)->append((char*)contents, realsize);
+    // Return the number of bytes processed; libcurl expects this
+    return realsize;
+}
+
+static Point2d post_request(std::string shared_mem_name) {
+  //Make curl object
+  CURL *curl;
+  CURLcode request;
+
+  // Intialize curl
+  curl_global_init(CURL_GLOBAL_DEFAULT);
+  curl = curl_easy_init();
+
+  // String to store the HTTP response body
+  std::string response_buffer;
+
+  Point2d ret;
+  ret.x = 0;
+  ret.y = 0;
+
+	if (curl) {
+	    // Set url to make post to
+	    curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8003/odlc");
+
+	    // Set request to be a POST
+	    curl_easy_setopt(curl, CURLOPT_POST, 1L);
+
+	    // Set JSON data to send the name of the shared memory object and the
+	    // telemetry data taken at the same time
+	    std::string json_string = "";
+	    json_string += "{\"img_name\": \"" + shared_mem_name + "}";
+	    const char *json_data = json_string.c_str();
+	    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_data);
+
+	    // Set content type header to json
+	    struct curl_slist *headers = nullptr;
+	    headers = curl_slist_append(headers, "Content-Type: application/json");
+	    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+	    // Set the callback function to write the response data
+	    // libcurl will call 'write_callback' whenever it receives data
+	    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+	    // Pass the 'response_buffer' (address of our string) to the callback
+	    // This allows the callback to write into our string
+	    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&response_buffer);
+
+	    // Send the request
+	    request = curl_easy_perform(curl);
+
+	    // Output if the request was successful or failed
+	    if (request != CURLE_OK) {
+	      std::cerr << "Request failed: " << curl_easy_strerror(request)
+			<< std::endl;
+	    } else {
+	      std::cout << "Request success." << std::endl;
+	      // Print the captured response
+	      std::cout << "Response:\n" << response_buffer << std::endl;
+	    }
+
+	    // Clean up
+	    curl_easy_cleanup(curl);
+	    curl_slist_free_all(headers);
+
+	    // parse response
+	    Json::Value root;
+		Json::Reader reader;
+		reader.parse(response_buffer, root);
+		ret.x = root[0].asDouble();
+		ret.y = root[1].asDouble();
+	  }
+
+  curl_global_cleanup();
+
+  return ret;
+}
+
 bool pid_to_red_circle(Offboard &offboard, Telemetry &telemetry) {
     double current_x = 0.0;
     double current_y = 0.0;
@@ -127,13 +213,21 @@ bool pid_to_red_circle(Offboard &offboard, Telemetry &telemetry) {
     do {
         // test photo
         std::cout << "Taking photo..." << std::endl;
-        cv::Mat photo = take_photo();
+        // cv::Mat photo = take_photo();
+	
+	// take_photo(); // takes photo
+	/*
         if (photo.empty()) {
             std::cerr << "Failed to take photo" << std::endl;
             return false;
         }
+	*/
         std::cout << "Photo taken" << std::endl;
-        std::optional<cv::Point2d> offset = get_offset(photo);
+	/*
+	 Post request here, set offset equal to the json output of the post request to the network
+	*/
+
+	std::optional<Point2d> offset = post_request("img_name");
         if (!offset) {
             std::cerr << "Failed to detect red dot" << std::endl;
             return false;

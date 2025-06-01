@@ -10,7 +10,7 @@ def detect(img_path):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     # get masks
-    shape_masks, text_masks = get_shape_text_masks(img)
+    centroids, shape_masks, text_masks = get_shape_text_masks(img)
 
     for i in range(len(shape_masks)):
         cv2.imwrite(f"{img_path}.shape_mask_{i}.png", shape_masks[i])
@@ -29,6 +29,7 @@ def detect(img_path):
     # color detection
     shape_mask = cv2.cvtColor(shape_mask, cv2.COLOR_BGR2GRAY)
     text_mask = cv2.cvtColor(text_mask, cv2.COLOR_BGR2GRAY)
+    print(shape_mask.shape, img.shape)
 
     shape_mask = shape_mask.astype(np.uint8)
     text_mask = text_mask.astype(np.uint8)
@@ -42,15 +43,16 @@ def detect(img_path):
     print(f"{shape_color=}, {text_color=}")
 
     # calculate mask center using contour moments
-    M = cv2.moments(np.uint8(shape_mask))
-    if M["m00"] == 0:
-        return None
+    #M = cv2.moments(np.uint8(shape_mask))
+    #if M["m00"] == 0:
+        #    return None
 
-    cX = int(M["m10"] / M["m00"])
-    cY = int(M["m01"] / M["m00"])
+    #cX = int(M["m10"] / M["m00"])
+    #cY = int(M["m01"] / M["m00"])
 
     # calculate offsets. note (0, 0) is the top left of the image
     height, width = img.shape[:2]
+    cX, cY = centroids[0]
     offsetX = cX - width/2
     offsetY = -(cY - height/2)
 

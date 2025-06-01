@@ -1,6 +1,4 @@
 // main.cpp
-#include "camera.h"
-#include "detector.h"
 #include <iostream>
 #include <string>
 #include <chrono>
@@ -107,7 +105,8 @@ int main(int argc, char** argv)
         std::cerr << "[saveDroneFrame] Failed to write " << file_path << "\n";
     }
     std::cout << "Saved Image to: " << file_path << "\n";
-    auto offset = get_offset(frame);
+    //auto offset = get_offset(frame);
+    offset = 1;
     if (offset) {
         std::cout << "Offset X: " << offset->x
                   << ", Offset Y: " << offset->y << "\n";
