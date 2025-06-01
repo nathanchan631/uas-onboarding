@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/uasatucla/uas-onboarding/test_mavsdk -I/usr/include/jsoncpp -isystem /usr/include/mavsdk
+CXX_INCLUDES = -I/home/uasatucla/uas-onboarding/test_mavsdk -I/usr/include/jsoncpp -isystem /usr/include/opencv4 -isystem /usr/include/mavsdk
 
 CXX_FLAGS = -std=gnu++17
 

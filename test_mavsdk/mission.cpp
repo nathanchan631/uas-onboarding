@@ -6,6 +6,7 @@
 #include <mavsdk/plugins/gimbal/gimbal.h>
 #include <curl/curl.h>
 #include <json/json.h>
+#include <opencv2/opencv.hpp>
 
 #include <algorithm>
 #include <chrono>
@@ -14,6 +15,8 @@
 
 using namespace mavsdk;
 using namespace std::chrono_literals;
+
+int take_photo(std::string path);
 
 struct PID {
     double kp;
@@ -119,7 +122,7 @@ size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
     return realsize;
 }
 
-static Point2d post_request(std::string shared_mem_name) {
+static Point2d post_request(std::string img_name) {
   //Make curl object
   CURL *curl;
   CURLcode request;
@@ -145,7 +148,7 @@ static Point2d post_request(std::string shared_mem_name) {
 	    // Set JSON data to send the name of the shared memory object and the
 	    // telemetry data taken at the same time
 	    std::string json_string = "";
-	    json_string += "{\"img_name\": \"" + shared_mem_name + "}";
+	    json_string += "{\"img_name\": \"" + img_name + "\"}";
 	    const char *json_data = json_string.c_str();
 	    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_data);
 
@@ -203,6 +206,7 @@ bool pid_to_red_circle(Offboard &offboard, Telemetry &telemetry) {
     PID pid_y(0.008, 0, 0.003);
     PID pid_z(1, 0, 0);
     double prev_time = 0;
+    std::string img_name = "capture.jpg";
 
     Offboard::VelocityBodyYawspeed velocity_command{};
     velocity_command.forward_m_s = 0;
@@ -215,7 +219,11 @@ bool pid_to_red_circle(Offboard &offboard, Telemetry &telemetry) {
         std::cout << "Taking photo..." << std::endl;
         // cv::Mat photo = take_photo();
 	
-	// take_photo(); // takes photo
+	int ret = take_photo(img_name); // takes photo
+	if(ret != 0) {
+		std::cerr << "Failed to take photo" << std::endl;
+		return false;
+	}
 	/*
         if (photo.empty()) {
             std::cerr << "Failed to take photo" << std::endl;
@@ -227,12 +235,12 @@ bool pid_to_red_circle(Offboard &offboard, Telemetry &telemetry) {
 	 Post request here, set offset equal to the json output of the post request to the network
 	*/
 
-	std::optional<Point2d> offset = post_request("img_name");
+	std::optional<Point2d> offset = post_request(img_name);
         if (!offset) {
-            std::cerr << "Failed to detect red dot" << std::endl;
+            std::cerr << "Failed to detect shape" << std::endl;
             return false;
         }
-        std::cout << "Red dot detected at: " << offset->x << ", " << offset->y << std::endl;
+        std::cout << "Shape detected at: " << offset->x << ", " << offset->y << std::endl;
 
         current_x = offset->x; 
         current_y = offset->y;
@@ -266,9 +274,36 @@ bool pid_to_red_circle(Offboard &offboard, Telemetry &telemetry) {
     return true;
 }
 
+int take_photo(std::string path) {
+	cv::VideoCapture cap(0);
+	if (!cap.isOpened()) {
+		std::cerr << "ERROR: Could not open camera index 0" << std::endl;
+		return 1;
+	}
+	cv::Mat frame;
+	cap >> frame;
+    	if (frame.empty()) {
+		std::cerr << "ERROR: Captured frame is empty" << std::endl;
+		return 1;
+  	}
+	const std::string outFilename = path;
+	bool saved = cv::imwrite(outFilename, frame);
+    	if (!saved) {
+		std::cerr << "ERROR: Could not save image to " << outFilename << std::endl;
+		return 1;
+	}
+
+	std::cout << "Captured one frame and saved to " << outFilename << std::endl;
+
+    	cap.release();
+	return 0;
+
+}
+
 int main() {
     Mavsdk mavsdk{Mavsdk::Configuration{ComponentType::GroundStation}};     
-    ConnectionResult connection_result = mavsdk.add_any_connection("udp://:14540");
+    ConnectionResult connection_result = mavsdk.add_any_connection("serial:///dev/serial/by-id/usb-FTDI_FT232R_USB_UART_XXXXXXXX-if00-port0:57600");
+
     if (connection_result != ConnectionResult::Success) {
         std::cerr << "Connection failed: " << connection_result << std::endl;
         return 1;
@@ -330,12 +365,14 @@ int main() {
     std::cout << "Finished takeoff" << std::endl;
 
     // bring down gimbal
+    /* Not needed for real flight
     if (!bring_down_gimbal(gimbal)) {
         return 1;
     }
+    */
 
     // leave the gimbal down for 5 seconds...
-    std::this_thread::sleep_for(5s);
+    // std::this_thread::sleep_for(5s);
 
     // run mission
     // std::cout << "Starting mission..." << std::endl;
@@ -365,7 +402,12 @@ int main() {
     }
     std::cout << "Offboard mode started, starting PID" << std::endl;
 
-    pid_to_red_circle(offboard, telemetry);
+    bool out = pid_to_red_circle(offboard, telemetry);
+    if(out)
+	    std::cout << "PID complete" << std::endl;
+    else
+	    std::cout << "Fatal error occured during PID, initiate landing" << std::endl;
+
 
     // Stop movement
     std::cout << "Stopping..." << std::endl;
@@ -381,4 +423,6 @@ int main() {
 
     std::this_thread::sleep_for(10s);
     std::cout << "Done." << std::endl;
+    return 0;
+		
 }

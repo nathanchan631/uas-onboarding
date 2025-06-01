@@ -565,14 +565,149 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
   /usr/include/c++/12/stack \
   /usr/include/c++/12/bits/stl_stack.h \
   /usr/include/jsoncpp/json/writer.h \
+  /usr/include/opencv4/opencv2/opencv.hpp \
+  /usr/include/opencv4/opencv2/opencv_modules.hpp \
+  /usr/include/opencv4/opencv2/core.hpp \
+  /usr/include/opencv4/opencv2/core/cvdef.h \
+  /usr/include/opencv4/opencv2/core/version.hpp \
+  /usr/include/opencv4/opencv2/core/hal/interface.h \
+  /usr/include/opencv4/opencv2/core/cv_cpu_dispatch.h \
+  /usr/lib/gcc/aarch64-linux-gnu/12/include/arm_neon.h \
+  /usr/lib/gcc/aarch64-linux-gnu/12/include/arm_fp16.h \
+  /usr/lib/gcc/aarch64-linux-gnu/12/include/arm_bf16.h \
+  /usr/include/opencv4/opencv2/core/base.hpp \
+  /usr/include/c++/12/climits \
   /usr/include/c++/12/algorithm \
   /usr/include/c++/12/pstl/glue_algorithm_defs.h \
-  /usr/include/c++/12/chrono \
+  /usr/include/opencv4/opencv2/core/cvstd.hpp \
+  /usr/include/opencv4/opencv2/core/cvstd_wrapper.hpp \
+  /usr/include/opencv4/opencv2/core/neon_utils.hpp \
+  /usr/include/opencv4/opencv2/core/vsx_utils.hpp \
+  /usr/include/assert.h \
+  /usr/include/opencv4/opencv2/core/check.hpp \
+  /usr/include/opencv4/opencv2/core/traits.hpp \
+  /usr/include/opencv4/opencv2/core/matx.hpp \
+  /usr/include/opencv4/opencv2/core/saturate.hpp \
+  /usr/include/opencv4/opencv2/core/fast_math.hpp \
+  /usr/include/opencv4/opencv2/core/types.hpp \
+  /usr/include/c++/12/cfloat \
+  /usr/lib/gcc/aarch64-linux-gnu/12/include/float.h \
+  /usr/include/opencv4/opencv2/core/mat.hpp \
+  /usr/include/opencv4/opencv2/core/bufferpool.hpp \
+  /usr/include/opencv4/opencv2/core/mat.inl.hpp \
+  /usr/include/opencv4/opencv2/core/persistence.hpp \
+  /usr/include/opencv4/opencv2/core/operations.hpp \
+  /usr/include/opencv4/opencv2/core/cvstd.inl.hpp \
+  /usr/include/c++/12/complex \
+  /usr/include/opencv4/opencv2/core/utility.hpp \
+  /usr/include/c++/12/mutex \
   /usr/include/c++/12/bits/chrono.h \
   /usr/include/c++/12/ratio \
   /usr/include/c++/12/ctime \
   /usr/include/c++/12/bits/parse_numbers.h \
+  /usr/include/c++/12/bits/std_mutex.h \
+  /usr/include/c++/12/bits/unique_lock.h \
+  /usr/include/opencv4/opencv2/core/optim.hpp \
+  /usr/include/opencv4/opencv2/core/ovx.hpp \
+  /usr/include/opencv4/opencv2/core/cvdef.h \
+  /usr/include/opencv4/opencv2/calib3d.hpp \
+  /usr/include/opencv4/opencv2/features2d.hpp \
+  /usr/include/opencv4/opencv2/flann/miniflann.hpp \
+  /usr/include/opencv4/opencv2/flann/defines.h \
+  /usr/include/opencv4/opencv2/flann/config.h \
+  /usr/include/opencv4/opencv2/core/affine.hpp \
+  /usr/include/opencv4/opencv2/dnn.hpp \
+  /usr/include/opencv4/opencv2/dnn/dnn.hpp \
+  /usr/include/opencv4/opencv2/core/async.hpp \
+  /usr/include/c++/12/chrono \
+  /usr/include/opencv4/opencv2/dnn/version.hpp \
+  /usr/include/opencv4/opencv2/dnn/dict.hpp \
+  /usr/include/opencv4/opencv2/dnn/layer.hpp \
+  /usr/include/opencv4/opencv2/dnn/dnn.inl.hpp \
+  /usr/include/opencv4/opencv2/dnn/utils/inference_engine.hpp \
+  /usr/include/opencv4/opencv2/dnn/dnn.hpp \
+  /usr/include/opencv4/opencv2/flann.hpp \
+  /usr/include/opencv4/opencv2/flann/flann_base.hpp \
+  /usr/include/opencv4/opencv2/flann/general.h \
+  /usr/include/opencv4/opencv2/flann/matrix.h \
+  /usr/include/opencv4/opencv2/flann/params.h \
+  /usr/include/opencv4/opencv2/flann/any.h \
+  /usr/include/opencv4/opencv2/flann/defines.h \
   /usr/include/c++/12/iostream \
+  /usr/include/opencv4/opencv2/flann/saving.h \
+  /usr/include/opencv4/opencv2/flann/nn_index.h \
+  /usr/include/opencv4/opencv2/flann/result_set.h \
+  /usr/include/c++/12/set \
+  /usr/include/c++/12/bits/stl_set.h \
+  /usr/include/c++/12/bits/stl_multiset.h \
+  /usr/include/opencv4/opencv2/flann/all_indices.h \
+  /usr/include/opencv4/opencv2/flann/kdtree_index.h \
+  /usr/include/opencv4/opencv2/flann/dynamic_bitset.h \
+  /usr/include/opencv4/opencv2/flann/dist.h \
+  /usr/include/opencv4/opencv2/flann/heap.h \
+  /usr/include/opencv4/opencv2/flann/allocator.h \
+  /usr/include/c++/12/stdlib.h \
+  /usr/include/opencv4/opencv2/flann/random.h \
+  /usr/include/opencv4/opencv2/flann/kdtree_single_index.h \
+  /usr/include/opencv4/opencv2/flann/kmeans_index.h \
+  /usr/include/opencv4/opencv2/flann/logger.h \
+  /usr/include/opencv4/opencv2/flann/composite_index.h \
+  /usr/include/opencv4/opencv2/flann/linear_index.h \
+  /usr/include/opencv4/opencv2/flann/hierarchical_clustering_index.h \
+  /usr/include/opencv4/opencv2/flann/lsh_index.h \
+  /usr/include/opencv4/opencv2/flann/lsh_table.h \
+  /usr/include/c++/12/iomanip \
+  /usr/include/c++/12/locale \
+  /usr/include/c++/12/bits/locale_facets_nonio.h \
+  /usr/include/aarch64-linux-gnu/c++/12/bits/time_members.h \
+  /usr/include/aarch64-linux-gnu/c++/12/bits/messages_members.h \
+  /usr/include/libintl.h \
+  /usr/include/c++/12/bits/codecvt.h \
+  /usr/include/c++/12/bits/locale_facets_nonio.tcc \
+  /usr/include/c++/12/bits/locale_conv.h \
+  /usr/include/c++/12/bits/quoted_string.h \
+  /usr/include/opencv4/opencv2/flann/autotuned_index.h \
+  /usr/include/opencv4/opencv2/flann/ground_truth.h \
+  /usr/include/opencv4/opencv2/flann/index_testing.h \
+  /usr/include/opencv4/opencv2/flann/timer.h \
+  /usr/include/opencv4/opencv2/flann/sampling.h \
+  /usr/include/opencv4/opencv2/highgui.hpp \
+  /usr/include/opencv4/opencv2/imgcodecs.hpp \
+  /usr/include/opencv4/opencv2/videoio.hpp \
+  /usr/include/opencv4/opencv2/imgproc.hpp \
+  /usr/include/opencv4/opencv2/imgproc/segmentation.hpp \
+  /usr/include/opencv4/opencv2/ml.hpp \
+  /usr/include/opencv4/opencv2/ml/ml.inl.hpp \
+  /usr/include/opencv4/opencv2/objdetect.hpp \
+  /usr/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp \
+  /usr/include/opencv4/opencv2/objdetect/face.hpp \
+  /usr/include/opencv4/opencv2/photo.hpp \
+  /usr/include/opencv4/opencv2/stitching.hpp \
+  /usr/include/opencv4/opencv2/stitching/warpers.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/warpers.hpp \
+  /usr/include/opencv4/opencv2/core/cuda.hpp \
+  /usr/include/opencv4/opencv2/core/cuda_types.hpp \
+  /usr/include/opencv4/opencv2/core/cuda.inl.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/warpers_inl.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/warpers.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/matchers.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/matchers.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/util.hpp \
+  /usr/include/c++/12/list \
+  /usr/include/c++/12/bits/stl_list.h \
+  /usr/include/c++/12/bits/list.tcc \
+  /usr/include/opencv4/opencv2/stitching/detail/util_inl.hpp \
+  /usr/include/c++/12/queue \
+  /usr/include/c++/12/bits/stl_queue.h \
+  /usr/include/opencv4/opencv2/stitching/detail/camera.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/exposure_compensate.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/seam_finders.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/blenders.hpp \
+  /usr/include/opencv4/opencv2/stitching/detail/camera.hpp \
+  /usr/include/opencv4/opencv2/video.hpp \
+  /usr/include/opencv4/opencv2/video/tracking.hpp \
+  /usr/include/opencv4/opencv2/video/background_segm.hpp \
   /usr/include/c++/12/thread \
   /usr/include/c++/12/bits/std_thread.h \
   /usr/include/c++/12/bits/this_thread_sleep.h
@@ -580,15 +715,177 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/c++/12/bits/std_thread.h:
 
+/usr/include/opencv4/opencv2/video/background_segm.hpp:
+
+/usr/include/opencv4/opencv2/video/tracking.hpp:
+
+/usr/include/opencv4/opencv2/video.hpp:
+
+/usr/include/opencv4/opencv2/stitching/detail/blenders.hpp:
+
+/usr/include/opencv4/opencv2/stitching/detail/seam_finders.hpp:
+
+/usr/include/c++/12/queue:
+
+/usr/include/c++/12/bits/list.tcc:
+
+/usr/include/c++/12/bits/stl_list.h:
+
+/usr/include/opencv4/opencv2/stitching/detail/util.hpp:
+
+/usr/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp:
+
+/usr/include/opencv4/opencv2/stitching/detail/matchers.hpp:
+
+/usr/include/opencv4/opencv2/stitching/detail/warpers_inl.hpp:
+
+/usr/include/opencv4/opencv2/core/cuda.inl.hpp:
+
+/usr/include/opencv4/opencv2/core/cuda.hpp:
+
+/usr/include/opencv4/opencv2/stitching/warpers.hpp:
+
+/usr/include/opencv4/opencv2/stitching.hpp:
+
+/usr/include/opencv4/opencv2/photo.hpp:
+
+/usr/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp:
+
+/usr/include/opencv4/opencv2/ml.hpp:
+
+/usr/include/opencv4/opencv2/imgproc/segmentation.hpp:
+
+/usr/include/opencv4/opencv2/imgproc.hpp:
+
+/usr/include/opencv4/opencv2/videoio.hpp:
+
+/usr/include/opencv4/opencv2/flann/sampling.h:
+
+/usr/include/c++/12/bits/quoted_string.h:
+
+/usr/include/c++/12/bits/codecvt.h:
+
+/usr/include/libintl.h:
+
+/usr/include/c++/12/locale:
+
+/usr/include/opencv4/opencv2/flann/linear_index.h:
+
+/usr/include/opencv4/opencv2/flann/composite_index.h:
+
+/usr/include/c++/12/bits/locale_facets_nonio.h:
+
+/usr/include/opencv4/opencv2/flann/logger.h:
+
+/usr/include/opencv4/opencv2/flann/kdtree_single_index.h:
+
+/usr/include/c++/12/stdlib.h:
+
+/usr/include/opencv4/opencv2/flann/heap.h:
+
+/usr/include/opencv4/opencv2/flann/dynamic_bitset.h:
+
+/usr/include/c++/12/bits/locale_conv.h:
+
+/usr/include/opencv4/opencv2/flann/kdtree_index.h:
+
+/usr/include/opencv4/opencv2/flann/all_indices.h:
+
+/usr/include/c++/12/set:
+
 /usr/include/c++/12/iostream:
+
+/usr/include/opencv4/opencv2/flann/params.h:
+
+/usr/include/opencv4/opencv2/flann.hpp:
+
+/usr/include/opencv4/opencv2/dnn/utils/inference_engine.hpp:
+
+/usr/include/opencv4/opencv2/dnn/dict.hpp:
+
+/usr/include/opencv4/opencv2/dnn/version.hpp:
+
+/usr/include/c++/12/chrono:
+
+/usr/include/opencv4/opencv2/core/async.hpp:
+
+/usr/include/opencv4/opencv2/dnn/dnn.hpp:
+
+/usr/include/opencv4/opencv2/core/affine.hpp:
+
+/usr/include/opencv4/opencv2/flann/config.h:
+
+/usr/include/opencv4/opencv2/flann/defines.h:
+
+/usr/include/opencv4/opencv2/features2d.hpp:
+
+/usr/include/opencv4/opencv2/calib3d.hpp:
+
+/usr/include/c++/12/bits/unique_lock.h:
+
+/usr/include/c++/12/bits/std_mutex.h:
 
 /usr/include/c++/12/bits/parse_numbers.h:
 
 /usr/include/c++/12/ratio:
 
-/usr/include/c++/12/chrono:
+/usr/include/opencv4/opencv2/core/optim.hpp:
+
+/usr/include/c++/12/mutex:
+
+/usr/include/opencv4/opencv2/core/cvstd.inl.hpp:
+
+/usr/include/opencv4/opencv2/core/operations.hpp:
+
+/usr/include/opencv4/opencv2/flann/dist.h:
+
+/usr/include/opencv4/opencv2/core/persistence.hpp:
+
+/usr/include/opencv4/opencv2/core/mat.inl.hpp:
+
+/usr/include/opencv4/opencv2/core/mat.hpp:
+
+/usr/lib/gcc/aarch64-linux-gnu/12/include/float.h:
+
+/usr/include/opencv4/opencv2/flann/saving.h:
+
+/usr/include/c++/12/cfloat:
+
+/usr/include/opencv4/opencv2/core/saturate.hpp:
+
+/usr/include/opencv4/opencv2/core/traits.hpp:
+
+/usr/include/opencv4/opencv2/core/check.hpp:
+
+/usr/include/assert.h:
+
+/usr/include/opencv4/opencv2/core/vsx_utils.hpp:
+
+/usr/include/opencv4/opencv2/core/neon_utils.hpp:
+
+/usr/include/opencv4/opencv2/core/cvstd_wrapper.hpp:
+
+/usr/include/opencv4/opencv2/core/cvstd.hpp:
 
 /usr/include/c++/12/algorithm:
+
+/usr/include/opencv4/opencv2/core/base.hpp:
+
+/usr/lib/gcc/aarch64-linux-gnu/12/include/arm_fp16.h:
+
+/usr/include/opencv4/opencv2/flann/miniflann.hpp:
+
+/usr/lib/gcc/aarch64-linux-gnu/12/include/arm_neon.h:
+
+/usr/include/c++/12/iomanip:
+
+/usr/include/opencv4/opencv2/core/cv_cpu_dispatch.h:
+
+/usr/include/opencv4/opencv2/dnn.hpp:
+
+/usr/include/opencv4/opencv2/core/hal/interface.h:
+
+/usr/include/opencv4/opencv2/core/version.hpp:
 
 /usr/include/c++/12/stack:
 
@@ -624,9 +921,13 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/aarch64-linux-gnu/bits/fp-logb.h:
 
+/usr/include/opencv4/opencv2/flann/any.h:
+
 /usr/include/aarch64-linux-gnu/bits/stdint-intn.h:
 
 /usr/include/aarch64-linux-gnu/bits/types/wint_t.h:
+
+/usr/include/opencv4/opencv2/core/fast_math.hpp:
 
 /usr/include/locale.h:
 
@@ -641,6 +942,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/aarch64-linux-gnu/c++/12/bits/ctype_inline.h:
 
 /usr/include/wctype.h:
+
+/usr/include/c++/12/bits/stl_multiset.h:
 
 /usr/include/sched.h:
 
@@ -676,6 +979,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/asm-generic/posix_types.h:
 
+/usr/include/c++/12/list:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_autopilot_version.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_param_request_read.h:
@@ -696,6 +1001,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/lib/linux/uapi/arm64/asm/socket.h:
 
+/usr/include/c++/12/bits/stl_set.h:
+
 /usr/include/c++/12/bits/unordered_map.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_collision.h:
@@ -713,6 +1020,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/aarch64-linux-gnu/bits/types/error_t.h:
 
 /usr/include/c++/12/functional:
+
+/usr/include/opencv4/opencv2/objdetect.hpp:
 
 /usr/include/c++/12/bits/streambuf.tcc:
 
@@ -752,6 +1061,10 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/aarch64-linux-gnu/bits/types/mbstate_t.h:
 
+/usr/include/opencv4/opencv2/flann/autotuned_index.h:
+
+/usr/include/opencv4/opencv2/flann/random.h:
+
 /usr/include/aarch64-linux-gnu/bits/types/struct_sched_param.h:
 
 /usr/include/mavsdk/mavlink/common/common.h:
@@ -773,6 +1086,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/c++/12/typeinfo:
 
 /usr/include/c++/12/math.h:
+
+/usr/include/opencv4/opencv2/dnn/dnn.inl.hpp:
 
 /usr/lib/linux/uapi/arm64/asm/bitsperlong.h:
 
@@ -828,15 +1143,23 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_can_frame.h:
 
+/usr/include/opencv4/opencv2/core/types.hpp:
+
 /usr/include/aarch64-linux-gnu/c++/12/bits/c++locale.h:
 
 /usr/include/c++/12/bits/locale_classes.tcc:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_raw_imu.h:
 
+/usr/include/opencv4/opencv2/flann/lsh_table.h:
+
 /usr/include/mavsdk/server_component.h:
 
+/usr/include/aarch64-linux-gnu/c++/12/bits/messages_members.h:
+
 /usr/include/c++/12/bits/exception.h:
+
+/usr/include/c++/12/complex:
 
 /usr/include/aarch64-linux-gnu/bits/mathcalls-helper-functions.h:
 
@@ -885,6 +1208,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/aarch64-linux-gnu/bits/struct_rwlock.h:
 
 /usr/include/aarch64-linux-gnu/sys/types.h:
+
+/usr/include/opencv4/opencv2/dnn/layer.hpp:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_video_stream_information.h:
 
@@ -944,6 +1269,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_wheel_distance.h:
 
+/usr/include/opencv4/opencv2/ml/ml.inl.hpp:
+
 /usr/include/aarch64-linux-gnu/sys/cdefs.h:
 
 /usr/include/c++/12/cmath:
@@ -979,6 +1306,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/asm-generic/errno-base.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_rc_channels.h:
+
+/usr/include/opencv4/opencv2/core/utility.hpp:
 
 /usr/include/aarch64-linux-gnu/gnu/stubs-lp64.h:
 
@@ -1032,6 +1361,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/aarch64-linux-gnu/bits/types.h:
 
+/usr/include/opencv4/opencv2/flann/ground_truth.h:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_nav_controller_output.h:
 
 /usr/include/c++/12/ctime:
@@ -1051,6 +1382,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/c++/12/new:
 
 /usr/include/limits.h:
+
+/usr/include/aarch64-linux-gnu/c++/12/bits/time_members.h:
 
 /usr/include/aarch64-linux-gnu/sys/time.h:
 
@@ -1078,6 +1411,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/lib/gcc/aarch64-linux-gnu/12/include/stddef.h:
 
+/usr/include/opencv4/opencv2/highgui.hpp:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_gps_global_origin.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_setup_signing.h:
@@ -1085,6 +1420,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/c++/12/bits/stl_tempbuf.h:
 
 /usr/include/c++/12/bits/postypes.h:
+
+/usr/include/opencv4/opencv2/core/bufferpool.hpp:
 
 /usr/lib/gcc/aarch64-linux-gnu/12/include/stdarg.h:
 
@@ -1099,6 +1436,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/mavsdk/mavlink/common/mavlink_msg_mission_item_reached.h:
 
 /usr/include/c++/12/istream:
+
+/usr/include/opencv4/opencv2/flann/allocator.h:
 
 /usr/include/c++/12/cctype:
 
@@ -1128,15 +1467,21 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/c++/12/bits/uniform_int_dist.h:
 
+/usr/include/opencv4/opencv2/core/cuda_types.hpp:
+
 /usr/include/c++/12/bits/ptr_traits.h:
 
 /usr/include/mavsdk/mavlink_include.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_ais_vessel.h:
 
+/usr/include/opencv4/opencv2/flann/matrix.h:
+
 /usr/include/c++/12/bits/utility.h:
 
 /usr/include/c++/12/bits/invoke.h:
+
+/usr/include/opencv4/opencv2/stitching/detail/camera.hpp:
 
 /usr/include/mavsdk/deprecated.h:
 
@@ -1164,6 +1509,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/aarch64-linux-gnu/bits/timesize.h:
 
+/usr/include/opencv4/opencv2/flann/flann_base.hpp:
+
 /usr/include/math.h:
 
 /usr/include/c++/12/bits/allocated_ptr.h:
@@ -1171,6 +1518,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/c++/12/pstl/pstl_config.h:
 
 /usr/include/c++/12/ext/numeric_traits.h:
+
+/usr/include/opencv4/opencv2/flann/general.h:
 
 /usr/include/c++/12/cerrno:
 
@@ -1200,6 +1549,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/time.h:
 
+/usr/include/opencv4/opencv2/flann/timer.h:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_camera_tracking_image_status.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_open_drone_id_message_pack.h:
@@ -1215,6 +1566,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/mavsdk/mavlink/common/mavlink_msg_camera_fov_status.h:
 
 /usr/include/c++/12/cstdlib:
+
+/usr/include/opencv4/opencv2/flann/lsh_index.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_esc_info.h:
 
@@ -1254,6 +1607,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_log_request_list.h:
 
+/usr/include/opencv4/opencv2/core/cvdef.h:
+
 /usr/include/aarch64-linux-gnu/bits/endianness.h:
 
 /usr/include/aarch64-linux-gnu/bits/thread-shared-types.h:
@@ -1267,6 +1622,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/alloca.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_tunnel.h:
+
+/usr/include/opencv4/opencv2/objdetect/face.hpp:
 
 /usr/include/aarch64-linux-gnu/bits/types/__fpos64_t.h:
 
@@ -1301,6 +1658,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/aarch64-linux-gnu/bits/libc-header-start.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_log_entry.h:
+
+/usr/include/opencv4/opencv2/stitching/detail/warpers.hpp:
 
 /usr/include/c++/12/tr1/poly_laguerre.tcc:
 
@@ -1350,6 +1709,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_rc_channels_scaled.h:
 
+/usr/include/opencv4/opencv2/imgcodecs.hpp:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_rc_channels_raw.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_can_filter_modify.h:
@@ -1382,11 +1743,15 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_safety_set_allowed_area.h:
 
+/usr/include/opencv4/opencv2/opencv_modules.hpp:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_safety_allowed_area.h:
 
 /usr/include/aarch64-linux-gnu/bits/cpu-set.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_attitude_quaternion_cov.h:
+
+/usr/include/opencv4/opencv2/flann/nn_index.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_local_position_ned_cov.h:
 
@@ -1446,7 +1811,11 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_radio_status.h:
 
+/usr/include/opencv4/opencv2/core/matx.hpp:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_set_home_position.h:
+
+/usr/include/c++/12/bits/stl_queue.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_storage_information.h:
 
@@ -1468,6 +1837,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_log_data.h:
 
+/usr/lib/gcc/aarch64-linux-gnu/12/include/arm_bf16.h:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_log_erase.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_isbd_link_status.h:
@@ -1488,6 +1859,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_gps2_rtk.h:
 
+/usr/include/opencv4/opencv2/stitching/detail/util_inl.hpp:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_scaled_imu3.h:
 
 /usr/include/aarch64-linux-gnu/bits/byteswap.h:
@@ -1504,6 +1877,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/c++/12/utility:
 
+/usr/include/opencv4/opencv2/stitching/detail/exposure_compensate.hpp:
+
 /usr/include/c++/12/debug/debug.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_terrain_check.h:
@@ -1512,7 +1887,11 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_open_drone_id_system.h:
 
+/usr/include/opencv4/opencv2/flann/hierarchical_clustering_index.h:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_att_pos_mocap.h:
+
+/usr/include/opencv4/opencv2/flann/result_set.h:
 
 /usr/include/aarch64-linux-gnu/bits/types/struct_timeval.h:
 
@@ -1542,7 +1921,11 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_high_latency.h:
 
+/usr/include/opencv4/opencv2/flann/kmeans_index.h:
+
 /usr/lib/linux/uapi/arm64/asm/sockios.h:
+
+/usr/include/c++/12/bits/locale_facets_nonio.tcc:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_high_latency2.h:
 
@@ -1583,6 +1966,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/mavsdk/mavlink/common/mavlink_msg_video_stream_status.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_gimbal_device_information.h:
+
+/usr/include/opencv4/opencv2/flann/index_testing.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_gimbal_device_attitude_status.h:
 
@@ -1634,6 +2019,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_generator_status.h:
 
+/usr/include/opencv4/opencv2/core/ovx.hpp:
+
 /usr/include/mavsdk/mavlink/common/mavlink_msg_actuator_output_status.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_component_information.h:
@@ -1649,6 +2036,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/mavsdk/mavlink/common/mavlink_msg_onboard_computer_status.h:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_current_event_sequence.h:
+
+/usr/include/opencv4/opencv2/core.hpp:
 
 /usr/include/mavsdk/mavlink/common/mavlink_msg_request_event.h:
 
@@ -1669,6 +2058,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/include/mavsdk/mavlink/common/mavlink_msg_open_drone_id_authentication.h:
 
 /usr/lib/gcc/aarch64-linux-gnu/12/include/limits.h:
+
+/usr/include/opencv4/opencv2/opencv.hpp:
 
 /usr/include/jsoncpp/json/reader.h:
 
@@ -1711,6 +2102,8 @@ CMakeFiles/take_image.dir/mission.cpp.o: /home/uasatucla/uas-onboarding/test_mav
 /usr/lib/linux/uapi/arm64/asm/posix_types.h:
 
 /usr/include/asm-generic/sockios.h:
+
+/usr/include/c++/12/climits:
 
 /usr/lib/linux/uapi/arm64/asm/errno.h:
 
