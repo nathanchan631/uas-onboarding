@@ -7,16 +7,16 @@ from vision.text_detection import predict_text
 
 def detect(img_path):
     img = cv2.imread(img_path)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
 
     # get masks
     centroids, shape_masks, text_masks = get_shape_text_masks(img)
 
     for i in range(len(shape_masks)):
-        cv2.imwrite(f"{img_path}.shape_mask_{i}.png", shape_masks[i])
+        cv2.imwrite(f"{img_path}.shape_mask_{i}.png", cv2.cvtColor(shape_masks[i], cv2.COLOR_RGB2BGR))
 
     for i in range(len(text_masks)):
-        cv2.imwrite(f"{img_path}.text_mask_{i}.png", text_masks[i])
+        cv2.imwrite(f"{img_path}.text_mask_{i}.png", cv2.cvtColor(text_masks[i], cv2.COLOR_RGB2BGR))
 
     shape_mask = shape_masks[0]
     text_mask = text_masks[0]
